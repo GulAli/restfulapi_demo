@@ -1,54 +1,32 @@
 package com.restfulapi.restfulapi_demo;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 public class WebController {
-    private final PersonService personService;
-    Person person = new Person();
 
-    public WebController(PersonService personService) 
-    {
-        this.personService = personService;
-    }
+    @Autowired
+    private PersonEntitiyRepository personEntitiyRepository;
 
-    @GetMapping("/")
-    public String HTTP_Request_getPersonName() 
-    {
-        return this.setHTMLPage(personService.retrivePersonName(person));
-    }
+    // Code works without a constructer
+    //public WebController(PersonEntitiyRepository personEntitiyRepository) 
+    //{
+    //    this.personEntitiyRepository = personEntitiyRepository;
+    //}
 
-    @GetMapping("/setNameAsAli")
-    public String HTTP_Request_setPersonName()
+    @GetMapping("/people")
+    public List<Person> showPeople() 
     {
-        personService.setPersonName(person, "Ali");
-        return setNameHTMLInfo("Ali");
-    }
-    
-    public String setHTMLPage(String string) 
-    {
-        return "<!DOCTYPE html>\r\n"                                + //
-                "<html>\r\n"                                        + //
-                "    <head>\r\n"                                    + //
-                "        <h3>Example</h3>\r\n"                      + //
-                "    </head>\r\n"                                   + //
-                "    <body>\r\n"                                    + //
-                "        <p>Name is now : " + string + " - (Go to "  + //
-                "<a href="+"http://localhost:8080/setNameAsAli"+">here)</a></p>\r\n" + //
-                "    </body>\r\n"                                   + //
-                "</html>";
+        // Retrieve the data from the "person" table
+        return personEntitiyRepository.findAll();
     }
 
-    public String setNameHTMLInfo(String string)
-    {
-        return "<!DOCTYPE html>\r\n"                                + //
-                "<html>\r\n"                                        + //
-                "    <body>\r\n"                                    + //
-                "        <p>Name is set as " + string + " - (Go back to "+//
-                "<a href="+"http://localhost:8080/"+">here)</a></p>\r\n"    + //
-                "    </body>\r\n"                                   + //
-                "</html>";
-    }
+    /*
+     * More endpoints can be added for CRUD operations.
+     */
 }
